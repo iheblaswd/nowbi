@@ -1,5 +1,11 @@
 {
-  "nav": { "now": "Now", "plan": "Plan", "focus": "Focus", "care": "Care", "me": "Me" },
+  "nav": {
+    "now": "Now",
+    "plan": "Plan",
+    "focus": "Focus",
+    "care": "Care",
+    "me": "Me"
+  },
   "now": {
     "right": "Right",
     "now": "now",
@@ -19,13 +25,54 @@
     "dump": "Dump it",
     "settings": "Settings"
   },
-  "energy": { "low": "low", "ok": "ok", "high": "high" },
+  "energy": {
+    "low": "low",
+    "ok": "ok",
+    "high": "high"
+  },
   "settings": {
     "title": "Settings",
     "language": "Language",
     "languageHint": "Arabic flips the whole layout right-to-left. The app restarts once to apply it.",
     "back": "Back",
     "resetSeed": "Reset demo tasks",
-    "noShame": "No-shame mode: always on. No red, no overdue, nothing dies."
+    "noShame": "No-shame mode: always on. No red, no overdue, nothing dies.",
+    "loadExamples": "Load example tasks"
+  },
+  "bucket": {
+    "now": "Now",
+    "next": "Next",
+    "later": "Later",
+    "done": "Done"
+  },
+  "plan": {
+    "title": "Today",
+    "summary": "{{done}} done · {{waiting}} waiting · nothing is late",
+    "empty": "Empty",
+    "steps": "{{count}} steps",
+    "noShame": "Nothing here is late. Later is just later."
+  },
+  "dump": {
+    "title": "Brain dump",
+    "prompt": "Say everything. Nowbi picks the one thing.",
+    "placeholder": "Type it messy: \"finish the report, call the dentist, Sara is waiting for the invoice answer, also buy milk\"",
+    "privacy": "Stays on this phone. Nothing is sent anywhere.",
+    "makePlan": "Make a plan",
+    "edit": "Edit",
+    "proposal": "Proposal",
+    "proposalTitle": "{{count}} things. First one is now.",
+    "nothingFound": "Nothing I could turn into a task. Try one thing per line.",
+    "proposalHint": "Anything over 25 min got steps. Reorder with the arrows; nothing is saved until you confirm.",
+    "confirm": "Confirm plan",
+    "startOver": "Start over",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "remove": "Remove",
+    "steps": {
+      "open": "Open what you need (2 min)",
+      "first": "Do the smallest first piece",
+      "middle": "Do the middle",
+      "finish": "Finish and close it"
+    }
   }
 }

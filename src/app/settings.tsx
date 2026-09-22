@@ -29,7 +29,7 @@ export default function SettingsScreen() {
     }
   };
 
-  const resetSeed = async () => {
+  const loadExamples = async () => {
     await clearAllTasks();
     await seedIfEmpty();
     router.back();
@@ -69,7 +69,7 @@ export default function SettingsScreen() {
       </View>
 
       <View style={styles.spacer} />
-      <Button label={t('settings.resetSeed')} onPress={resetSeed} variant="outline" />
+      <Button label={t('settings.loadExamples')} onPress={loadExamples} variant="outline" />
     </Screen>
   );
 }

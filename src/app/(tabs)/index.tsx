@@ -70,7 +70,14 @@ export default function NowScreen() {
             </View>
           </>
         ) : (
-          <Text style={styles.muted}>{t('now.empty')}</Text>
+          <>
+            <Text style={styles.muted}>{t('now.empty')}</Text>
+            <Link href="/dump" asChild>
+              <Pressable accessibilityRole="button" style={styles.fab}>
+                <Text style={styles.fabText}>{t('now.dump')}</Text>
+              </Pressable>
+            </Link>
+          </>
         )}
       </Card>
 
@@ -89,10 +96,14 @@ export default function NowScreen() {
       <View style={styles.spacer} />
 
       <View style={styles.foot}>
-        <Sticker tone="dark">{t('now.doneToday', { count: doneCount })}</Sticker>
         <Link href="/settings" asChild>
           <Pressable accessibilityRole="button" accessibilityLabel={t('now.settings')} style={styles.settings}>
             <Text style={styles.settingsText}>{t('now.settings')}</Text>
+          </Pressable>
+        </Link>
+        <Link href="/dump" asChild>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('now.dump')} style={styles.fab}>
+            <Text style={styles.fabText}>{t('now.dump')}</Text>
           </Pressable>
         </Link>
       </View>
@@ -121,6 +132,8 @@ const styles = StyleSheet.create({
   section: { gap: space.sm },
   spacer: { flex: 1, minHeight: space.lg },
   foot: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: space.md },
-  settings: { height: 44, paddingHorizontal: 18, borderRadius: 999, backgroundColor: colors.text, alignItems: 'center', justifyContent: 'center' },
-  settingsText: { fontFamily: fonts.display, fontSize: 12, letterSpacing: 0.8, textTransform: 'uppercase', color: colors.ink },
+  settings: { height: 44, paddingHorizontal: 16, borderRadius: 999, backgroundColor: colors.surface2, alignItems: 'center', justifyContent: 'center' },
+  settingsText: { fontFamily: fonts.display, fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase', color: colors.text },
+  fab: { height: 56, paddingHorizontal: 22, borderRadius: 999, backgroundColor: colors.text, alignItems: 'center', justifyContent: 'center', transform: [{ rotate: '-2deg' }] },
+  fabText: { fontFamily: fonts.display, fontSize: 14, letterSpacing: 0.9, textTransform: 'uppercase', color: colors.ink },
 });

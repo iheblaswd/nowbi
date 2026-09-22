@@ -1,5 +1,11 @@
 {
-  "nav": { "now": "Là", "plan": "Plan", "focus": "Focus", "care": "Soin", "me": "Moi" },
+  "nav": {
+    "now": "Là",
+    "plan": "Plan",
+    "focus": "Focus",
+    "care": "Soin",
+    "me": "Moi"
+  },
   "now": {
     "right": "Là,",
     "now": "maintenant",
@@ -19,13 +25,54 @@
     "dump": "Vide ta tête",
     "settings": "Réglages"
   },
-  "energy": { "low": "basse", "ok": "ok", "high": "haute" },
+  "energy": {
+    "low": "basse",
+    "ok": "ok",
+    "high": "haute"
+  },
   "settings": {
     "title": "Réglages",
     "language": "Langue",
     "languageHint": "L'arabe inverse toute la mise en page de droite à gauche. L'app redémarre une fois.",
     "back": "Retour",
     "resetSeed": "Réinitialiser les tâches démo",
-    "noShame": "Mode sans honte : toujours actif. Pas de rouge, pas de retard, rien ne meurt."
+    "noShame": "Mode sans honte : toujours actif. Pas de rouge, pas de retard, rien ne meurt.",
+    "loadExamples": "Charger des tâches d’exemple"
+  },
+  "bucket": {
+    "now": "Maintenant",
+    "next": "Ensuite",
+    "later": "Plus tard",
+    "done": "Fait"
+  },
+  "plan": {
+    "title": "Aujourd’hui",
+    "summary": "{{done}} faits · {{waiting}} en attente · rien n’est en retard",
+    "empty": "Vide",
+    "steps": "{{count}} étapes",
+    "noShame": "Rien ici n’est en retard. Plus tard, c’est juste plus tard."
+  },
+  "dump": {
+    "title": "Vide ta tête",
+    "prompt": "Dis tout. Nowbi choisit la seule chose à faire.",
+    "placeholder": "Tape en vrac : « finir le rapport, appeler le dentiste, Sara attend la réponse pour la facture, acheter du lait »",
+    "privacy": "Reste sur ce téléphone. Rien n’est envoyé.",
+    "makePlan": "Faire un plan",
+    "edit": "Modifier",
+    "proposal": "Proposition",
+    "proposalTitle": "{{count}} choses. La première, c’est maintenant.",
+    "nothingFound": "Je n’ai rien pu transformer en tâche. Essaie une chose par ligne.",
+    "proposalHint": "Plus de 25 min = des étapes. Réordonne avec les flèches ; rien n’est enregistré avant de confirmer.",
+    "confirm": "Confirmer le plan",
+    "startOver": "Recommencer",
+    "moveUp": "Monter",
+    "moveDown": "Descendre",
+    "remove": "Retirer",
+    "steps": {
+      "open": "Ouvrir ce qu’il faut (2 min)",
+      "first": "Faire le plus petit premier morceau",
+      "middle": "Faire le milieu",
+      "finish": "Finir et fermer"
+    }
   }
 }

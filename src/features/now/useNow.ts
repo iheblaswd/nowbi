@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-import { completeTask, deferTask, ensureNow, listTasks, seedIfEmpty, Task } from '@/db/tasks';
+import { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { completeTask, deferTask, ensureNow, listTasks, Task } from '@/db/tasks';
 import { confirmMeds, getTodayPlan, Plan } from '@/db/plans';
 
 export type NowState = {
@@ -28,9 +29,12 @@ export function useNow() {
     });
   }, []);
 
-  useEffect(() => {
-    seedIfEmpty().then(refresh);
-  }, [refresh]);
+  // Refresh every time the screen is shown (after a dump, a move in Plan, etc.).
+  useFocusEffect(
+    useCallback(() => {
+      refresh();
+    }, [refresh]),
+  );
 
   const done = useCallback(async () => {
     if (!state.current) return;
