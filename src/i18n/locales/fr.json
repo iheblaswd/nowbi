@@ -1,0 +1,31 @@
+{
+  "nav": { "now": "Là", "plan": "Plan", "focus": "Focus", "care": "Soin", "me": "Moi" },
+  "now": {
+    "right": "Là,",
+    "now": "maintenant",
+    "upNext": "Ensuite",
+    "done": "Fait",
+    "notNow": "Pas maintenant",
+    "doneToday": "{{count}} faits aujourd'hui",
+    "doneCount": "{{count}} faits",
+    "meds": "Médicaments",
+    "medsDue": "Médicaments à prendre",
+    "energy": "Énergie {{level}}",
+    "step": "Étape {{n}} sur {{total}} · {{name}}",
+    "minutes": "{{count}} min",
+    "empty": "Rien ici. Vide ta tête et Nowbi choisit une seule chose.",
+    "nothingQueued": "Rien en attente. Plus tard en contient {{count}}.",
+    "movedLater": "Déplacé à plus tard. Aucune pénalité.",
+    "dump": "Vide ta tête",
+    "settings": "Réglages"
+  },
+  "energy": { "low": "basse", "ok": "ok", "high": "haute" },
+  "settings": {
+    "title": "Réglages",
+    "language": "Langue",
+    "languageHint": "L'arabe inverse toute la mise en page de droite à gauche. L'app redémarre une fois.",
+    "back": "Retour",
+    "resetSeed": "Réinitialiser les tâches démo",
+    "noShame": "Mode sans honte : toujours actif. Pas de rouge, pas de retard, rien ne meurt."
+  }
+}

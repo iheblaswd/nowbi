@@ -1,0 +1,31 @@
+{
+  "nav": { "now": "Now", "plan": "Plan", "focus": "Focus", "care": "Care", "me": "Me" },
+  "now": {
+    "right": "Right",
+    "now": "now",
+    "upNext": "Up next",
+    "done": "Done",
+    "notNow": "Not now",
+    "doneToday": "{{count}} done today",
+    "doneCount": "{{count}} done",
+    "meds": "Meds",
+    "medsDue": "Meds due",
+    "energy": "Energy {{level}}",
+    "step": "Step {{n}} of {{total}} · {{name}}",
+    "minutes": "{{count}} min",
+    "empty": "Nothing here. Dump what is in your head and Nowbi picks one thing.",
+    "nothingQueued": "Nothing queued. Later has {{count}}.",
+    "movedLater": "Moved to later. No penalty.",
+    "dump": "Dump it",
+    "settings": "Settings"
+  },
+  "energy": { "low": "low", "ok": "ok", "high": "high" },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "languageHint": "Arabic flips the whole layout right-to-left. The app restarts once to apply it.",
+    "back": "Back",
+    "resetSeed": "Reset demo tasks",
+    "noShame": "No-shame mode: always on. No red, no overdue, nothing dies."
+  }
+}
