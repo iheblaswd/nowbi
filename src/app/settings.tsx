@@ -8,12 +8,14 @@ import { Sticker } from '@/components/Sticker';
 import { Button } from '@/components/Button';
 import { changeLanguage, Lang, SUPPORTED } from '@/i18n';
 import { clearAllTasks, seedIfEmpty } from '@/db/tasks';
+import { useAuth } from '@/features/auth/AuthProvider';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
 const LABELS: Record<Lang, string> = { en: 'English', fr: 'Français', ar: 'العربية' };
 
 export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
+  const { session, guest, signOut } = useAuth();
   const [busy, setBusy] = useState(false);
 
   const pick = async (lang: Lang) => {
@@ -68,8 +70,13 @@ export default function SettingsScreen() {
         <Text style={styles.hint}>{t('settings.noShame')}</Text>
       </View>
 
+      <View style={styles.box}>
+        <Text style={styles.hint}>{session?.user.email ? t('settings.signedInAs', { email: session.user.email }) : guest ? t('settings.guestMode') : ''}</Text>
+      </View>
+
       <View style={styles.spacer} />
       <Button label={t('settings.loadExamples')} onPress={loadExamples} variant="outline" />
+      <Button label={t('settings.logout')} onPress={() => signOut()} variant="dark" />
     </Screen>
   );
 }

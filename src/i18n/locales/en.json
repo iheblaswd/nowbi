@@ -37,7 +37,10 @@
     "back": "Back",
     "resetSeed": "Reset demo tasks",
     "noShame": "No-shame mode: always on. No red, no overdue, nothing dies.",
-    "loadExamples": "Load example tasks"
+    "loadExamples": "Load example tasks",
+    "logout": "Log out",
+    "signedInAs": "Signed in as {{email}}",
+    "guestMode": "Using Nowbi without an account"
   },
   "bucket": {
     "now": "Now",
@@ -73,6 +76,61 @@
       "first": "Do the smallest first piece",
       "middle": "Do the middle",
       "finish": "Finish and close it"
+    }
+  },
+  "welcome": {
+    "tag1": "One thing at a time",
+    "tag2": "No shame",
+    "tag3": "Stays on your phone",
+    "pitch": "Dump your brain. See one thing. Do it with company.",
+    "sub": "A calm daily companion for ADHD adults. Never red, never overdue, nothing dies.",
+    "google": "Continue with Google",
+    "signup": "Sign up with email",
+    "login": "I have an account",
+    "guest": "Continue without an account",
+    "notConfigured": "Accounts are not set up on this build yet (see SETUP-AUTH.md).",
+    "legal": "By continuing you accept that your data stays on this phone unless you turn sync on."
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "8 characters or more",
+    "signupTag": "New account",
+    "signupTitle": "Make an account",
+    "signupSub": "One email to confirm, then you never see this screen again.",
+    "createAccount": "Create account",
+    "haveAccount": "I already have an account",
+    "loginTag": "Welcome back",
+    "loginTitle": "Log in",
+    "login": "Log in",
+    "noAccount": "I need an account",
+    "working": "One moment…",
+    "callback": "Logging you in…",
+    "verify": {
+      "tag": "Check your inbox",
+      "title": "We sent you a link",
+      "sub": "Tap Confirm in the email. This screen opens the app by itself as soon as you do.",
+      "waiting": "Waiting… {{seconds}} s",
+      "openMail": "Open my mail app",
+      "clicked": "I clicked the link",
+      "resend": "Send the email again",
+      "resent": "Sent again. Give it a minute.",
+      "notYet": "Not confirmed yet. Tap the link in the email, then come back.",
+      "changeEmail": "Change email",
+      "spam": "Not there? Look in spam, or resend."
+    },
+    "errors": {
+      "notConfigured": "Accounts are not set up on this build.",
+      "emailTaken": "This email already has an account. Log in instead.",
+      "notConfirmed": "Confirm your email first.",
+      "cancelled": "Sign-in was cancelled.",
+      "invalid": "Wrong email or password.",
+      "weakPassword": "Use at least 8 characters.",
+      "badEmail": "That email does not look right.",
+      "rateLimit": "Too many tries. Wait a minute and try again.",
+      "googleOff": "Google sign-in is not enabled yet.",
+      "network": "No connection. Try again.",
+      "generic": "Something went wrong. Try again."
     }
   }
 }

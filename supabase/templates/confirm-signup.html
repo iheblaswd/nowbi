@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Confirm your Nowbi account</title>
+  </head>
+  <body style="margin:0;padding:0;background:#0B0B0F;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#FFFFFF;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0B0B0F;">
+      <tr>
+        <td align="center" style="padding:32px 16px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:480px;">
+            <tr>
+              <td style="padding:0 0 20px 0;">
+                <span style="display:inline-block;background:#FFD23F;color:#0B0B0F;font-weight:900;font-size:28px;letter-spacing:1px;padding:6px 14px;border-radius:999px;transform:rotate(-3deg);">NOW</span>
+                <span style="display:inline-block;background:#FF5DA2;color:#0B0B0F;font-weight:900;font-size:28px;letter-spacing:1px;padding:6px 14px;border-radius:999px;margin-left:4px;">BI</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="border:3px solid #FFFFFF;border-radius:22px;padding:28px 24px;background:#0B0B0F;">
+                <p style="margin:0 0 8px 0;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#B3B3C0;">One tap left</p>
+                <h1 style="margin:0 0 14px 0;font-size:26px;line-height:1.15;font-weight:900;color:#FFFFFF;">Confirm your email and Nowbi opens on your phone.</h1>
+                <p style="margin:0 0 24px 0;font-size:15px;line-height:1.5;color:#B3B3C0;">
+                  You just created a Nowbi account with <strong style="color:#FFFFFF;">{{ .Email }}</strong>.
+                  Tap the button and go back to the app: it logs you in by itself.
+                </p>
+                <table role="presentation" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td style="background:#FFD23F;border-radius:999px;">
+                      <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:16px 28px;font-size:15px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#0B0B0F;text-decoration:none;">Confirm my email</a>
+                    </td>
+                  </tr>
+                </table>
+                <p style="margin:24px 0 0 0;font-size:13px;line-height:1.5;color:#7C7C8A;">
+                  Button not working? Copy this link into your browser:<br />
+                  <a href="{{ .ConfirmationURL }}" style="color:#3DA5FF;word-break:break-all;">{{ .ConfirmationURL }}</a>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:20px 8px 0 8px;font-size:12px;line-height:1.5;color:#7C7C8A;">
+                No red, no overdue, nothing dies. If you didn't create this account, ignore this email and nothing happens.<br />
+                Nowbi · one thing at a time.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

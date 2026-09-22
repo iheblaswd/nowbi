@@ -24,14 +24,16 @@ npm test
 
 1. **Daily loop** — Sticker Bomb design system, EN/FR/AR with RTL, local SQLite store, Now screen with Done / Not now (Not now rolls to Later, never "overdue"), Up next, done count, meds "taken at" sticker.
 2. **Brain dump → plan** — type everything messy; the on-device rules planner splits it into tasks (EN/FR/AR fillers stripped), guesses durations, adds four steps to anything over 25 min, buckets the first as Now and the next few as Next (fewer on low-energy days); reorder, remove, confirm. Plus the **Plan** tab: Now / Next / Later / Done with one-tap moves, and bottom tabs.
+3. **Welcome + accounts** — first screen with the pitch, then Google sign-in or email + password (Supabase, free tier). Email sign-up sends a branded confirmation email (`supabase/templates/confirm-signup.html`); the app shows a loader and logs in by itself the moment the link is clicked. Log out from Settings. Setup: `SETUP-AUTH.md`; without `.env` the app offers "Continue without an account".
 
 ## Structure
 
 ```
-src/app/         Expo Router screens ((tabs)/index = Now, (tabs)/plan, dump, settings)
+src/app/         Expo Router screens (welcome, auth/*, (tabs)/index = Now, (tabs)/plan, dump, settings)
 src/components/  design system (Sticker, Button, Card, TimeBar, TaskRow, Screen)
 src/db/          SQLite: database.ts (schema), tasks.ts, plans.ts, settings.ts
-src/features/    per-feature logic (now/useNow.ts, dump/planner.ts + tests)
+src/features/    per-feature logic (now/useNow.ts, dump/planner.ts + tests, auth/AuthProvider.tsx)
+src/lib/         supabase client (reads EXPO_PUBLIC_SUPABASE_* from .env)
 src/i18n/        i18next setup + locales
 src/theme/       tokens
 ```

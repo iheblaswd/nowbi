@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Stack } from 'expo-router';
+import { Stack, router, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, View } from 'react-native';
 import { useFonts, ArchivoBlack_400Regular } from '@expo-google-fonts/archivo-black';
@@ -7,7 +7,33 @@ import { Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold } from '@expo-g
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { getDb } from '@/db/database';
 import { initI18n } from '@/i18n';
+import { AuthProvider, useAuth } from '@/features/auth/AuthProvider';
 import { colors } from '@/theme/tokens';
+
+function Splash() {
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.ground, alignItems: 'center', justifyContent: 'center' }}>
+      <ActivityIndicator color={colors.yellow} />
+    </View>
+  );
+}
+
+/** Sends signed-out users to the welcome flow and signed-in users into the app. */
+function Gate({ children }: { children: React.ReactNode }) {
+  const { ready, session, guest } = useAuth();
+  const segments = useSegments();
+  const inAuth = segments[0] === 'welcome' || segments[0] === 'auth';
+  const allowed = !!session || guest;
+
+  useEffect(() => {
+    if (!ready) return;
+    if (!allowed && !inAuth) router.replace('/welcome');
+    if (allowed && inAuth) router.replace('/');
+  }, [ready, allowed, inAuth]);
+
+  if (!ready) return <Splash />;
+  return <>{children}</>;
+}
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({ ArchivoBlack_400Regular, Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold });
@@ -23,18 +49,16 @@ export default function RootLayout() {
       });
   }, []);
 
-  if (!fontsLoaded || !ready) {
-    return (
-      <View style={{ flex: 1, backgroundColor: colors.ground, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator color={colors.yellow} />
-      </View>
-    );
-  }
+  if (!fontsLoaded || !ready) return <Splash />;
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="light" />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.ground } }} />
+      <AuthProvider>
+        <StatusBar style="light" />
+        <Gate>
+          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.ground }, animation: 'fade' }} />
+        </Gate>
+      </AuthProvider>
     </SafeAreaProvider>
   );
 }

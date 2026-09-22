@@ -40,6 +40,5 @@ yarn-error.*
 /ios
 /android
 
-# Claude desktop app downloads
-Claude outputs/
-_transfer/
+# secrets
+.env

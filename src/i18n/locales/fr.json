@@ -37,7 +37,10 @@
     "back": "Retour",
     "resetSeed": "Réinitialiser les tâches démo",
     "noShame": "Mode sans honte : toujours actif. Pas de rouge, pas de retard, rien ne meurt.",
-    "loadExamples": "Charger des tâches d’exemple"
+    "loadExamples": "Charger des tâches d’exemple",
+    "logout": "Se déconnecter",
+    "signedInAs": "Connecté en tant que {{email}}",
+    "guestMode": "Nowbi sans compte"
   },
   "bucket": {
     "now": "Maintenant",
@@ -73,6 +76,61 @@
       "first": "Faire le plus petit premier morceau",
       "middle": "Faire le milieu",
       "finish": "Finir et fermer"
+    }
+  },
+  "welcome": {
+    "tag1": "Une chose à la fois",
+    "tag2": "Sans honte",
+    "tag3": "Reste sur ton téléphone",
+    "pitch": "Vide ta tête. Vois une seule chose. Fais-la accompagné.",
+    "sub": "Un compagnon quotidien calme pour les adultes TDAH. Jamais de rouge, jamais de retard, rien ne meurt.",
+    "google": "Continuer avec Google",
+    "signup": "S’inscrire par email",
+    "login": "J’ai un compte",
+    "guest": "Continuer sans compte",
+    "notConfigured": "Les comptes ne sont pas encore configurés sur cette version (voir SETUP-AUTH.md).",
+    "legal": "En continuant, tu acceptes que tes données restent sur ce téléphone sauf si tu actives la synchronisation."
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Mot de passe",
+    "passwordHint": "8 caractères ou plus",
+    "signupTag": "Nouveau compte",
+    "signupTitle": "Créer un compte",
+    "signupSub": "Un email à confirmer, puis tu ne revois plus jamais cet écran.",
+    "createAccount": "Créer le compte",
+    "haveAccount": "J’ai déjà un compte",
+    "loginTag": "Content de te revoir",
+    "loginTitle": "Connexion",
+    "login": "Se connecter",
+    "noAccount": "Je n’ai pas de compte",
+    "working": "Un instant…",
+    "callback": "Connexion en cours…",
+    "verify": {
+      "tag": "Regarde ta boîte mail",
+      "title": "On t’a envoyé un lien",
+      "sub": "Appuie sur Confirmer dans l’email. Cet écran ouvre l’app tout seul dès que c’est fait.",
+      "waiting": "En attente… {{seconds}} s",
+      "openMail": "Ouvrir ma messagerie",
+      "clicked": "J’ai cliqué sur le lien",
+      "resend": "Renvoyer l’email",
+      "resent": "Renvoyé. Laisse-lui une minute.",
+      "notYet": "Pas encore confirmé. Appuie sur le lien dans l’email, puis reviens.",
+      "changeEmail": "Changer d’email",
+      "spam": "Rien reçu ? Regarde dans les spams, ou renvoie."
+    },
+    "errors": {
+      "notConfigured": "Les comptes ne sont pas configurés sur cette version.",
+      "emailTaken": "Cet email a déjà un compte. Connecte-toi.",
+      "notConfirmed": "Confirme d’abord ton email.",
+      "cancelled": "Connexion annulée.",
+      "invalid": "Email ou mot de passe incorrect.",
+      "weakPassword": "Utilise au moins 8 caractères.",
+      "badEmail": "Cet email ne semble pas valide.",
+      "rateLimit": "Trop d’essais. Attends une minute.",
+      "googleOff": "La connexion Google n’est pas encore activée.",
+      "network": "Pas de connexion. Réessaie.",
+      "generic": "Un problème est survenu. Réessaie."
     }
   }
 }
