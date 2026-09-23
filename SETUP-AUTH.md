@@ -36,8 +36,9 @@ The email link points to a page you host, not to supabase.co. `docs/confirm/inde
 The app uses Google's native account picker: no browser, a popup inside the app, tap the account, logged in. It runs in a development build or the Play build (Expo Go cannot load the native module and falls back to the browser flow).
 
 1. Google Cloud → **Identifiants → Créer des identifiants → ID client OAuth → Application Web**, name `Nowbi web`, redirect URI `https://YOUR-PROJECT-REF.supabase.co/auth/v1/callback`. Copy its Client ID into `.env` as `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`, and its ID + secret into Supabase → Authentication → Providers → Google (also tick *Skip nonce checks*).
-2. Get your debug signing SHA-1 (PowerShell):
-   `keytool -list -v -keystore "$env:USERPROFILE\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android | Select-String SHA1`
+2. Get the debug signing SHA-1. The development build is signed with the keystore **inside the project** (`android/app/debug.keystore`, created by `npx expo run:android`), not the one in your user folder. PowerShell, from the repo root, after the first `npx expo run:android`:
+   `keytool -list -v -keystore android\app\debug.keystore -alias androiddebugkey -storepass android -keypass android | Select-String SHA1`
+   (Expo's default debug keystore gives `5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25`.)
 3. Google Cloud → **Créer des identifiants → ID client OAuth → Android**, name `Nowbi Android debug`, package `com.nowbi.app`, paste the SHA-1. (Before Play: add a second Android client with the Play App Signing SHA-1 from Play Console → App integrity.)
 4. Build and run the development build once (Android Studio + a phone on USB with USB debugging, or an emulator):
    `npx expo run:android`
