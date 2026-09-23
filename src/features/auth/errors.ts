@@ -5,6 +5,9 @@ export function authErrorKey(e: unknown): string {
   if (msg === 'auth/email-taken') return 'auth.errors.emailTaken';
   if (msg === 'auth/not-confirmed') return 'auth.errors.notConfirmed';
   if (msg === 'auth/cancelled') return 'auth.errors.cancelled';
+  if (msg === 'auth/google-not-configured' || msg === 'auth/no-token') return 'auth.errors.googleOff';
+  if (/SIGN_IN_CANCELLED|12501/i.test(msg)) return 'auth.errors.cancelled';
+  if (/DEVELOPER_ERROR|10:/i.test(msg)) return 'auth.errors.googleDev';
   if (/invalid login credentials/i.test(msg)) return 'auth.errors.invalid';
   if (/password should be at least|weak password/i.test(msg)) return 'auth.errors.weakPassword';
   if (/valid email|invalid email/i.test(msg)) return 'auth.errors.badEmail';

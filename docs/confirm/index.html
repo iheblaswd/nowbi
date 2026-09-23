@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nowbi · Confirming your email</title>
+  <style>
+    body { margin: 0; background: #0B0B0F; color: #fff; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; min-height: 100vh; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; }
+    .card { max-width: 420px; width: 100%; border: 3px solid #fff; border-radius: 22px; padding: 28px 24px; }
+    .logo span { display: inline-block; font-weight: 900; font-size: 26px; padding: 4px 12px; border-radius: 999px; color: #0B0B0F; }
+    .now { background: #FFD23F; transform: rotate(-3deg); } .bi { background: #FF5DA2; transform: rotate(2deg); margin-left: 4px; }
+    h1 { font-size: 24px; margin: 18px 0 8px; line-height: 1.15; }
+    p { color: #B3B3C0; line-height: 1.5; margin: 0 0 16px; }
+    a.btn { display: inline-block; background: #FFD23F; color: #0B0B0F; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; padding: 14px 24px; border-radius: 999px; text-decoration: none; }
+    .muted { color: #7C7C8A; font-size: 13px; }
+    .spin { width: 28px; height: 28px; border: 3px solid #2A2A33; border-top-color: #FFD23F; border-radius: 50%; animation: s 1s linear infinite; }
+    @keyframes s { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo"><span class="now">NOW</span><span class="bi">BI</span></div>
+    <div id="state">
+      <div class="spin"></div>
+      <h1>Confirming your email…</h1>
+      <p>One second.</p>
+    </div>
+  </div>
+  <script src="./config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    // Public project settings (the anon key is safe to publish; data is protected by RLS).
+    var SUPABASE_URL = 'https://mewnfkmurutnlzvwvcvx.supabase.co';
+    var SUPABASE_ANON_KEY = window.NOWBI_ANON_KEY || '';
+    var APP_LINK = 'nowbi://auth/callback';
+    var state = document.getElementById('state');
+    function show(title, text, withButton) {
+      state.innerHTML = '<h1>' + title + '</h1><p>' + text + '</p>' + (withButton ? '<a class="btn" href="' + APP_LINK + '">Open Nowbi</a>' : '') + '<p class="muted" style="margin-top:16px">You can close this page.</p>';
+    }
+    (async function () {
+      var q = new URLSearchParams(location.search);
+      var tokenHash = q.get('token_hash');
+      var type = q.get('type') || 'email';
+      if (!tokenHash) { show('This link is incomplete', 'Open the email again and tap the button.'); return; }
+      if (!SUPABASE_ANON_KEY) { show('Page not configured', 'The anon key is missing in docs/confirm/config.js.'); return; }
+      try {
+        var client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        var res = await client.auth.verifyOtp({ token_hash: tokenHash, type: type });
+        if (res.error) throw res.error;
+        show('Email confirmed', 'Go back to the Nowbi app on your phone: it logs you in by itself.', true);
+        setTimeout(function () { location.href = APP_LINK; }, 800);
+      } catch (e) {
+        show('This link has expired or was already used', 'Open the app and tap "Send the email again".');
+      }
+    })();
+  </script>
+</body>
+</html>

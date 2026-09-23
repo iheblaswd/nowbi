@@ -130,7 +130,8 @@
       "rateLimit": "Too many tries. Wait a minute and try again.",
       "googleOff": "Google sign-in is not enabled yet.",
       "network": "No connection. Try again.",
-      "generic": "Something went wrong. Try again."
+      "generic": "Something went wrong. Try again.",
+      "googleDev": "Google sign-in is misconfigured (SHA-1 or client ID). See SETUP-AUTH.md."
     },
     "googleWait": "Finishing sign-in with Google…"
   }

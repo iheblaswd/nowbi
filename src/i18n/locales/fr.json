@@ -130,7 +130,8 @@
       "rateLimit": "Trop d’essais. Attends une minute.",
       "googleOff": "La connexion Google n’est pas encore activée.",
       "network": "Pas de connexion. Réessaie.",
-      "generic": "Un problème est survenu. Réessaie."
+      "generic": "Un problème est survenu. Réessaie.",
+      "googleDev": "Connexion Google mal configurée (SHA-1 ou ID client). Voir SETUP-AUTH.md."
     },
     "googleWait": "Connexion avec Google en cours…"
   }

@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useR
 import { AppState } from 'react-native';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
+import Constants from 'expo-constants';
 import type { Session } from '@supabase/supabase-js';
 import { supabase, supabaseConfigured } from '@/lib/supabase';
 import { getSetting, setSetting } from '@/db/settings';
@@ -81,6 +82,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // 3. Handle links that open the app: OAuth code, or the email confirmation redirect.
+  const handledCodes = useRef(new Set<string>());
+  const exchangeCode = useCallback(async (code: string) => {
+    const client = supabase;
+    if (!client || handledCodes.current.has(code)) return;
+    handledCodes.current.add(code);
+    const { error } = await client.auth.exchangeCodeForSession(code);
+    if (error) console.warn('code exchange failed', error.message);
+  }, []);
+
   useEffect(() => {
     const client = supabase;
     if (!client) return;
@@ -89,7 +99,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const parsed = new URL(url);
       const code = parsed.searchParams.get('code');
       if (code) {
-        await client.auth.exchangeCodeForSession(code);
+        await exchangeCode(code);
         return;
       }
       // Implicit fragment (#access_token=…) from an older email template.
@@ -102,7 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     Linking.getInitialURL().then(handle);
     const sub = Linking.addEventListener('url', (e) => handle(e.url));
     return () => sub.remove();
-  }, []);
+  }, [exchangeCode]);
 
   const requireClient = () => {
     if (!supabase) throw new Error('auth/not-configured');
@@ -148,7 +158,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) throw error;
   }, []);
 
-  const signInWithGoogle = useCallback(async () => {
+  /** Waits briefly for a session to appear (the deep-link handler may finish the exchange). */
+  const waitForSession = useCallback(async (ms: number) => {
+    const client = requireClient();
+    const started = Date.now();
+    while (Date.now() - started < ms) {
+      const { data } = await client.auth.getSession();
+      if (data.session) return true;
+      await new Promise((r) => setTimeout(r, 400));
+    }
+    return false;
+  }, []);
+
+  /** Browser-based OAuth (Expo Go, or when the native module is unavailable). */
+  const signInWithGoogleWeb = useCallback(async () => {
     const client = requireClient();
     const redirectTo = authRedirectUrl();
     const { data, error } = await client.auth.signInWithOAuth({
@@ -157,13 +180,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
     if (error) throw error;
     if (!data.url) throw new Error('auth/no-url');
-    const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
-    if (result.type !== 'success') throw new Error('auth/cancelled');
-    const code = new URL(result.url).searchParams.get('code');
-    if (!code) throw new Error('auth/no-code');
-    const { error: exErr } = await client.auth.exchangeCodeForSession(code);
-    if (exErr) throw exErr;
+    const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo, { showInRecents: true });
+    if (result.type === 'success') {
+      const code = new URL(result.url).searchParams.get('code');
+      if (code) await exchangeCode(code);
+    }
+    // Android often reports "dismiss" even though the return link reached the app; give it a moment.
+    if (!(await waitForSession(6000))) throw new Error('auth/cancelled');
+  }, [exchangeCode, waitForSession]);
+
+  /** Native account picker (development and Play builds): no browser, shows "Nowbi", not a domain. */
+  const signInWithGoogleNative = useCallback(async () => {
+    const client = requireClient();
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const mod = require('@react-native-google-signin/google-signin') as typeof import('@react-native-google-signin/google-signin');
+    const webClientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
+    if (!webClientId) throw new Error('auth/google-not-configured');
+    mod.GoogleSignin.configure({ webClientId });
+    await mod.GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    try {
+      await mod.GoogleSignin.signOut();
+    } catch {
+      // ignore: nothing to sign out from
+    }
+    const res = await mod.GoogleSignin.signIn();
+    if (!mod.isSuccessResponse(res)) throw new Error('auth/cancelled');
+    const idToken = res.data.idToken;
+    if (!idToken) throw new Error('auth/no-token');
+    const { error } = await client.auth.signInWithIdToken({ provider: 'google', token: idToken });
+    if (error) throw error;
   }, []);
+
+  const signInWithGoogle = useCallback(async () => {
+    const inExpoGo = Constants.appOwnership === 'expo';
+    if (inExpoGo || !process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID) return signInWithGoogleWeb();
+    try {
+      await signInWithGoogleNative();
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      // Native module missing (e.g. a build without it): fall back to the browser flow.
+      if (/RNGoogleSignin|TurboModule|not found|Cannot read/i.test(msg)) return signInWithGoogleWeb();
+      throw e;
+    }
+  }, [signInWithGoogleWeb, signInWithGoogleNative]);
 
   const continueAsGuest = useCallback(async () => {
     await setSetting('guest', '1');
@@ -176,6 +235,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     pendingRef.current = null;
     setPending(null);
     if (supabase) await supabase.auth.signOut();
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const mod = require('@react-native-google-signin/google-signin') as typeof import('@react-native-google-signin/google-signin');
+      await mod.GoogleSignin.signOut();
+    } catch {
+      // not available in Expo Go: fine
+    }
   }, []);
 
   const value = useMemo<AuthContextValue>(

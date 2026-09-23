@@ -19,13 +19,13 @@
             <table role="presentation" cellspacing="0" cellpadding="0">
               <tr>
                 <td style="background-color:#FFD23F;border-radius:999px;">
-                  <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:16px 28px;font-size:15px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#0B0B0F;text-decoration:none;">Confirm my email</a>
+                  <a href="{{ .SiteURL }}/confirm/?token_hash={{ .TokenHash }}&type=email" style="display:inline-block;padding:16px 28px;font-size:15px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#0B0B0F;text-decoration:none;">Confirm my email</a>
                 </td>
               </tr>
             </table>
             <p style="margin:24px 0 0 0;font-size:13px;line-height:1.5;color:#7C7C8A;">
               Button not working? Copy this link into your browser:<br>
-              <a href="{{ .ConfirmationURL }}" style="color:#3DA5FF;word-break:break-all;">{{ .ConfirmationURL }}</a>
+              <a href="{{ .SiteURL }}/confirm/?token_hash={{ .TokenHash }}&type=email" style="color:#3DA5FF;word-break:break-all;">{{ .SiteURL }}/confirm/?token_hash={{ .TokenHash }}&type=email</a>
             </p>
           </td>
         </tr>
