@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { Screen } from '@/components/Screen';
 import { Sticker } from '@/components/Sticker';
@@ -54,9 +55,26 @@ export default function WelcomeScreen() {
         </View>
       ) : null}
       <View style={styles.btns}>
-        <Button label={busy ? t('auth.working') : t('welcome.google')} onPress={google} variant="white" disabled={busy || !configured} />
-        <Button label={t('welcome.signup')} onPress={() => router.push('/auth/signup')} disabled={busy || !configured} />
-        <Button label={t('welcome.login')} onPress={() => router.push('/auth/login')} variant="outline" disabled={busy || !configured} />
+        <Button
+          label={busy ? t('auth.working') : t('welcome.google')}
+          onPress={google}
+          variant="white"
+          disabled={busy || !configured}
+          icon={(c) => <AntDesign name="google" size={20} color={c} />}
+        />
+        <Button
+          label={t('welcome.signup')}
+          onPress={() => router.push('/auth/signup')}
+          disabled={busy || !configured}
+          icon={(c) => <Ionicons name="mail" size={22} color={c} />}
+        />
+        <Button
+          label={t('welcome.login')}
+          onPress={() => router.push('/auth/login')}
+          variant="outline"
+          disabled={busy || !configured}
+          icon={(c) => <Ionicons name="log-in-outline" size={24} color={c} />}
+        />
         {!configured && (
           <>
             <Text style={styles.hint}>{t('welcome.notConfigured')}</Text>

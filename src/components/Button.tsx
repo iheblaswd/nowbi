@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { colors, fonts, radius } from '@/theme/tokens';
 
 type Variant = 'primary' | 'outline' | 'purple' | 'pink' | 'blue' | 'white' | 'dark';
@@ -12,6 +12,8 @@ type Props = {
   disabled?: boolean;
   style?: ViewStyle;
   accessibilityLabel?: string;
+  /** Optional glyph shown before the label (receives the label color via `iconColor`). */
+  icon?: (iconColor: string) => React.ReactNode;
 };
 
 const bg: Record<Variant, string> = {
@@ -33,7 +35,7 @@ const fg: Record<Variant, string> = {
   dark: colors.text,
 };
 
-export function Button({ label, onPress, variant = 'primary', size = 'md', disabled, style, accessibilityLabel }: Props) {
+export function Button({ label, onPress, variant = 'primary', size = 'md', disabled, style, accessibilityLabel, icon }: Props) {
   return (
     <Pressable
       onPress={onPress}
@@ -50,6 +52,7 @@ export function Button({ label, onPress, variant = 'primary', size = 'md', disab
         style,
       ]}
     >
+      {icon ? <View style={styles.icon}>{icon(fg[variant])}</View> : null}
       <Text style={[styles.label, { color: fg[variant] }, size === 'sm' && styles.labelSm]}>{label}</Text>
     </Pressable>
   );
@@ -58,6 +61,7 @@ export function Button({ label, onPress, variant = 'primary', size = 'md', disab
 const styles = StyleSheet.create({
   base: {
     flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radius.pill,
@@ -65,6 +69,7 @@ const styles = StyleSheet.create({
   md: { height: 54, paddingHorizontal: 18 },
   sm: { height: 42, paddingHorizontal: 16, flex: 0 },
   outline: { borderWidth: 3, borderColor: colors.text },
+  icon: { marginRight: 10, alignItems: 'center', justifyContent: 'center' },
   label: {
     fontFamily: fonts.display,
     fontSize: 15,
