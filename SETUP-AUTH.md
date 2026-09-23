@@ -8,28 +8,42 @@ Everything here is free. It takes about 15 minutes once.
 2. Project Settings → API: copy **Project URL** and **anon public** key.
 3. In the repo, copy `.env.example` to `.env` and paste both values. Restart `npx expo start` (env is read at start).
 
-## 2. Email + password with confirmation
+## 2. Email + password with confirmation (Nowbi sends its own emails)
 
-1. Authentication → Providers → Email: keep **Enable email provider** on and **Confirm email** on.
-2. Authentication → Email Templates → **Confirm signup**: subject `Confirm your Nowbi account`, body = the contents of `supabase/templates/confirm-signup.html`. Keep `{{ .ConfirmationURL }}` as is.
-3. Authentication → URL Configuration:
-   - Site URL: `https://iheblaswd.github.io/nowbi` (the confirmation page below lives there; the email template builds the link as `{{ .SiteURL }}/confirm/…`). Later: `https://nowbi.app`.
-   - Redirect URLs, add all three (Supabase falls back to the Site URL when the app's return address is not listed):
-     - `nowbi://**`
-     - `exp://**` (Expo Go during development, LAN or tunnel)
-     - `https://YOUR-PROJECT-REF.supabase.co/**`
+Same architecture as FPL iQ: Supabase never emails anyone. Its **Send Email hook** calls a tiny Cloudflare Worker of ours (`workers/mail`, free plan), which puts the token in a link to **our** page (`https://iheblaswd.github.io/nowbi/confirm/`) and sends the Nowbi-designed email from a Nowbi Gmail account. Nothing says supabase.co, the subject and design are ours, and the free-tier template lock does not matter.
 
-How the flow works in the app: sign-up sends the email, the app shows the loader screen and polls sign-in every 4 s with the credentials kept in memory; the moment the link is clicked the email is confirmed, sign-in succeeds and the app opens. Clicking the link on the phone also deep-links back into the app.
+1. Authentication → Providers → Email: **Enable email provider** on, **Confirm email** on.
+2. Gmail for the sender: a Google account for Nowbi (e.g. `nowbi.app@gmail.com`) with 2-Step Verification on, then https://myaccount.google.com/apppasswords → app password (16 characters).
+3. Deploy the worker (once, from the repo root; Cloudflare free account):
+   ```
+   cd workers\mail
+   npm install
+   npx wrangler login
+   npx wrangler deploy
+   ```
+   Note the URL it prints: `https://nowbi-mail.<your-account>.workers.dev`.
+4. Supabase → Authentication → Hooks → **Send Email** → Enable → type **HTTPS** → URL `https://nowbi-mail.<your-account>.workers.dev/auth/send` → **Generate secret** → copy it (`v1,whsec_…`) → Save.
+5. Give the worker its three secrets (still in `workers\mail`):
+   ```
+   npx wrangler secret put SEND_EMAIL_HOOK_SECRET
+   npx wrangler secret put GMAIL_USER
+   npx wrangler secret put GMAIL_APP_PASSWORD
+   ```
+6. Authentication → URL Configuration:
+   - Site URL: `https://iheblaswd.github.io/nowbi`. Later: `https://nowbi.app`.
+   - Redirect URLs: `nowbi://**`, `exp://**`, `https://mewnfkmurutnlzvwvcvx.supabase.co/**`.
 
-Free-tier note: Supabase's built-in mailer allows only a few emails per hour. For real users, Authentication → SMTP Settings: use a free SMTP such as Brevo (300/day) or Resend (3,000/month).
+How the flow works in the app: sign-up sends the email (in the app's language, `user_metadata.lang`), the app shows the loader screen and polls sign-in every 4 s with the credentials kept in memory; the moment the link is tapped our page verifies the token, the email is confirmed, sign-in succeeds and the app opens. On the phone the page also deep-links back into the app. The same worker sends password-reset, magic-link and email-change emails; the reset link opens a "choose a new password" form on our page.
 
-## 2b. Confirmation page on your own address (free, GitHub Pages)
+Test the worker without an email: `cd workers\mail && npm test`. Watch it live while signing up: `npx wrangler tail`.
 
-The email link points to a page you host, not to supabase.co. `docs/confirm/index.html` verifies the token and opens the app.
+## 2b. The confirmation page (free, GitHub Pages)
+
+`docs/confirm/index.html` verifies the token and opens the app.
 
 1. Put your publishable key in `docs/confirm/config.js` (same value as `.env`), commit, push.
 2. GitHub → repo `nowbi` → Settings → Pages → Source: Deploy from a branch, Branch `main`, folder `/docs`, Save. After a minute the page is at `https://iheblaswd.github.io/nowbi/confirm/`.
-3. Supabase Site URL = `https://iheblaswd.github.io/nowbi` (step 2.3). When you own `nowbi.app`, add it as the custom domain in GitHub Pages and change the Site URL only.
+3. When you own `nowbi.app`: add it as the custom domain in GitHub Pages, change `CONFIRM_URL` in `workers/mail/wrangler.toml`, redeploy the worker, and change the Site URL.
 
 ## 3. Google sign-in (native popup, like FPL IQ)
 

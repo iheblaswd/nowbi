@@ -1,0 +1,14 @@
+name = "nowbi-mail"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+compatibility_flags = ["nodejs_compat"]   # worker-mailer (SMTP over cloudflare:sockets)
+
+[vars]
+# The page the email links to (docs/confirm on GitHub Pages). Change to https://nowbi.app/confirm/ later.
+CONFIRM_URL = "https://iheblaswd.github.io/nowbi/confirm/"
+FROM_NAME = "Nowbi"
+
+# Secrets, set once with:
+#   npx wrangler secret put SEND_EMAIL_HOOK_SECRET   (Supabase → Authentication → Hooks → Send Email → the v1,whsec_… secret)
+#   npx wrangler secret put GMAIL_USER               (the Nowbi Gmail address)
+#   npx wrangler secret put GMAIL_APP_PASSWORD       (16-character app password, no spaces)

@@ -3,55 +3,124 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nowbi · Confirming your email</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0B0B0F" />
+  <title>Nowbi · your account</title>
   <style>
+    /* Where the emails land: confirm the address, or choose a new password. Same ground as the app; works at 360px. */
     body { margin: 0; background: #0B0B0F; color: #fff; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; min-height: 100vh; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; }
-    .card { max-width: 420px; width: 100%; border: 3px solid #fff; border-radius: 22px; padding: 28px 24px; }
+    .card { max-width: 420px; width: 100%; border: 3px solid #fff; border-radius: 22px; padding: 28px 24px; box-sizing: border-box; }
     .logo span { display: inline-block; font-weight: 900; font-size: 26px; padding: 4px 12px; border-radius: 999px; color: #0B0B0F; }
     .now { background: #FFD23F; transform: rotate(-3deg); } .bi { background: #FF5DA2; transform: rotate(2deg); margin-left: 4px; }
-    h1 { font-size: 24px; margin: 18px 0 8px; line-height: 1.15; }
+    .k { font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #B3B3C0; margin: 18px 0 6px; }
+    h1 { font-size: 24px; margin: 0 0 8px; line-height: 1.15; }
     p { color: #B3B3C0; line-height: 1.5; margin: 0 0 16px; }
-    a.btn { display: inline-block; background: #FFD23F; color: #0B0B0F; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; padding: 14px 24px; border-radius: 999px; text-decoration: none; }
+    a.btn, button.btn { display: inline-block; background: #FFD23F; color: #0B0B0F; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; padding: 14px 24px; border-radius: 999px; text-decoration: none; border: 0; font-size: 14px; cursor: pointer; }
+    button.btn[disabled] { opacity: .5; cursor: default; }
+    label { display: block; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #B3B3C0; margin: 14px 0 6px; }
+    input { width: 100%; height: 48px; border-radius: 14px; border: 2px solid #2A2A33; background: #16161C; color: #fff; font-size: 16px; padding: 0 14px; box-sizing: border-box; outline: none; }
+    input:focus { border-color: #3DA5FF; }
+    .err { color: #FF5DA2; font-size: 14px; margin: 12px 0 0; }
     .muted { color: #7C7C8A; font-size: 13px; }
     .spin { width: 28px; height: 28px; border: 3px solid #2A2A33; border-top-color: #FFD23F; border-radius: 50%; animation: s 1s linear infinite; }
     @keyframes s { to { transform: rotate(360deg); } }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="logo"><span class="now">NOW</span><span class="bi">BI</span></div>
-    <div id="state">
+
+    <section id="s-wait">
+      <div class="k">One moment</div>
       <div class="spin"></div>
-      <h1>Confirming your email…</h1>
-      <p>One second.</p>
-    </div>
+      <h1 style="margin-top:12px">Checking your link…</h1>
+    </section>
+
+    <section id="s-verified" hidden>
+      <div class="k">Done</div>
+      <h1>Email confirmed</h1>
+      <p>Go back to the Nowbi app on your phone: it logs you in by itself.</p>
+      <a class="btn" id="open-app" href="nowbi://auth/callback">Open Nowbi</a>
+      <p class="muted" style="margin-top:16px">You can close this page.</p>
+    </section>
+
+    <section id="s-reset" hidden>
+      <div class="k">Password reset</div>
+      <h1>Choose a new password</h1>
+      <p>For the account <b id="r-email" style="color:#fff"></b>.</p>
+      <form id="r-form" autocomplete="off">
+        <label for="r-pw1">New password</label>
+        <input id="r-pw1" type="password" autocomplete="new-password" minlength="8" required placeholder="8 characters or more" />
+        <label for="r-pw2">Repeat it</label>
+        <input id="r-pw2" type="password" autocomplete="new-password" minlength="8" required />
+        <div class="err" id="r-err" hidden></div>
+        <button class="btn" id="r-go" type="submit" style="margin-top:18px">Save the new password</button>
+      </form>
+    </section>
+
+    <section id="s-reset-done" hidden>
+      <div class="k">Done</div>
+      <h1>Password changed</h1>
+      <p>Go back to the app and log in with your email and the new password.</p>
+      <a class="btn" href="nowbi://auth/callback">Open Nowbi</a>
+    </section>
+
+    <section id="s-bad" hidden>
+      <div class="k">This link</div>
+      <h1>Expired or already used</h1>
+      <p id="bad-why">Links work once and expire after a while. Open the app and ask for a new one, it takes a few seconds.</p>
+    </section>
   </div>
+
   <script src="./config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
     // Public project settings (the anon key is safe to publish; data is protected by RLS).
     var SUPABASE_URL = 'https://mewnfkmurutnlzvwvcvx.supabase.co';
     var SUPABASE_ANON_KEY = window.NOWBI_ANON_KEY || '';
-    var APP_LINK = 'nowbi://auth/callback';
-    var state = document.getElementById('state');
-    function show(title, text, withButton) {
-      state.innerHTML = '<h1>' + title + '</h1><p>' + text + '</p>' + (withButton ? '<a class="btn" href="' + APP_LINK + '">Open Nowbi</a>' : '') + '<p class="muted" style="margin-top:16px">You can close this page.</p>';
+    var q = new URLSearchParams(location.search);
+    var APP_LINK = /^nowbi:\/\//.test(q.get('next') || '') ? q.get('next') : 'nowbi://auth/callback';
+    document.querySelectorAll('a.btn').forEach(function (a) { a.href = APP_LINK; });
+
+    function show(id, why) {
+      ['s-wait', 's-verified', 's-reset', 's-reset-done', 's-bad'].forEach(function (s) { document.getElementById(s).hidden = s !== id; });
+      if (why) document.getElementById('bad-why').textContent = why;
     }
+
     (async function () {
-      var q = new URLSearchParams(location.search);
       var tokenHash = q.get('token_hash');
-      var type = q.get('type') || 'email';
-      if (!tokenHash) { show('This link is incomplete', 'Open the email again and tap the button.'); return; }
-      if (!SUPABASE_ANON_KEY) { show('Page not configured', 'The anon key is missing in docs/confirm/config.js.'); return; }
-      try {
-        var client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        var res = await client.auth.verifyOtp({ token_hash: tokenHash, type: type });
-        if (res.error) throw res.error;
-        show('Email confirmed', 'Go back to the Nowbi app on your phone: it logs you in by itself.', true);
-        setTimeout(function () { location.href = APP_LINK; }, 800);
-      } catch (e) {
-        show('This link has expired or was already used', 'Open the app and tap "Send the email again".');
+      var type = q.get('type') || 'signup';
+      if (!tokenHash) { show('s-bad', 'This link is incomplete. Open the email again and tap the button.'); return; }
+      if (!SUPABASE_ANON_KEY || !window.supabase) { show('s-bad', 'This page is not configured yet (docs/confirm/config.js).'); return; }
+      var client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      var res = await client.auth.verifyOtp({ token_hash: tokenHash, type: type });
+      if (res.error) { show('s-bad'); return; }
+
+      if (type === 'recovery') {
+        var user = res.data && res.data.user;
+        document.getElementById('r-email').textContent = (user && user.email) || '';
+        show('s-reset');
+        document.getElementById('r-form').addEventListener('submit', async function (ev) {
+          ev.preventDefault();
+          var p1 = document.getElementById('r-pw1').value, p2 = document.getElementById('r-pw2').value, err = document.getElementById('r-err');
+          err.hidden = true;
+          if (p1.length < 8) { err.textContent = 'Use at least 8 characters.'; err.hidden = false; return; }
+          if (p1 !== p2) { err.textContent = 'The two passwords don’t match.'; err.hidden = false; return; }
+          var go = document.getElementById('r-go'); go.disabled = true;
+          var up = await client.auth.updateUser({ password: p1 });
+          if (up.error) { err.textContent = up.error.message || 'Try again.'; err.hidden = false; go.disabled = false; return; }
+          await client.auth.signOut();
+          show('s-reset-done');
+        });
+        return;
       }
+
+      // signup / magiclink / email_change / invite: confirmed. The session created here belongs to this
+      // browser only; the app signs in on its own (it polls until the address is confirmed).
+      await client.auth.signOut();
+      show('s-verified');
+      setTimeout(function () { location.href = APP_LINK; }, 800);
     })();
   </script>
 </body>

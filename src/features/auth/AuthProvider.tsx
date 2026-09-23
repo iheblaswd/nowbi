@@ -6,6 +6,7 @@ import Constants from 'expo-constants';
 import type { Session } from '@supabase/supabase-js';
 import { supabase, supabaseConfigured } from '@/lib/supabase';
 import { getSetting, setSetting } from '@/db/settings';
+import i18n from '@/i18n';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -121,7 +122,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = useCallback(async (email: string, password: string) => {
     const client = requireClient();
-    const { data, error } = await client.auth.signUp({ email, password, options: { emailRedirectTo: authRedirectUrl() } });
+    // `lang` rides along in user_metadata so the mail worker writes the email in the app's language.
+    const { data, error } = await client.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: authRedirectUrl(), data: { lang: i18n.language.slice(0, 2) } },
+    });
     if (error) throw error;
     // Supabase returns a user with no identities when the address is already registered.
     if (data.user && data.user.identities && data.user.identities.length === 0) throw new Error('auth/email-taken');

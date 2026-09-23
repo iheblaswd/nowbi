@@ -42,3 +42,7 @@ yarn-error.*
 
 # secrets
 .env
+
+# Cloudflare worker
+workers/mail/.wrangler/
+workers/mail/.dev.vars
