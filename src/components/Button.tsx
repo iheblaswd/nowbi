@@ -60,14 +60,16 @@ export function Button({ label, onPress, variant = 'primary', size = 'md', disab
 
 const styles = StyleSheet.create({
   base: {
-    flex: 1,
+    alignSelf: 'stretch',
+    flexGrow: 0,
+    flexShrink: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radius.pill,
   },
   md: { height: 54, paddingHorizontal: 18 },
-  sm: { height: 42, paddingHorizontal: 16, flex: 0 },
+  sm: { height: 42, paddingHorizontal: 16, alignSelf: 'flex-start' },
   outline: { borderWidth: 3, borderColor: colors.text },
   icon: { marginRight: 10, alignItems: 'center', justifyContent: 'center' },
   label: {

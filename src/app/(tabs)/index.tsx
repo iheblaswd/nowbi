@@ -65,8 +65,8 @@ export default function NowScreen() {
               </Sticker>
             </View>
             <View style={styles.btns}>
-              <Button label={t('now.done')} onPress={done} />
-              <Button label={t('now.notNow')} onPress={notNow} variant="outline" />
+              <Button label={t('now.done')} onPress={done} style={styles.half} />
+              <Button label={t('now.notNow')} onPress={notNow} variant="outline" style={styles.half} />
             </View>
           </>
         ) : (
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
   muted: { color: colors.muted, fontFamily: fonts.body, fontSize: 15 },
   bar: { flexDirection: 'row', alignItems: 'center', gap: space.md },
   btns: { flexDirection: 'row', gap: space.md, marginTop: 4 },
+  half: { flex: 1, alignSelf: 'auto' },
   section: { gap: space.sm },
   spacer: { flex: 1, minHeight: space.lg },
   foot: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: space.md },
