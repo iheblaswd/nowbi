@@ -13,10 +13,11 @@ Everything here is free. It takes about 15 minutes once.
 1. Authentication → Providers → Email: keep **Enable email provider** on and **Confirm email** on.
 2. Authentication → Email Templates → **Confirm signup**: subject `Confirm your Nowbi account`, body = the contents of `supabase/templates/confirm-signup.html`. Keep `{{ .ConfirmationURL }}` as is.
 3. Authentication → URL Configuration:
-   - Site URL: `https://iheblaswd.github.io/nowbi/confirmed` (or any page that says "confirmed, go back to the app"; until it exists, `nowbi://auth/callback` also works).
-   - Redirect URLs, add:
-     - `nowbi://auth/callback`
-     - `exp://*/--/auth/callback` (Expo Go during development)
+   - Site URL: `nowbi://auth/callback`
+   - Redirect URLs, add all three (Supabase falls back to `http://localhost:3000` when the app's return address is not listed):
+     - `nowbi://**`
+     - `exp://**` (Expo Go during development, LAN or tunnel)
+     - `https://YOUR-PROJECT-REF.supabase.co/**`
 
 How the flow works in the app: sign-up sends the email, the app shows the loader screen and polls sign-in every 4 s with the credentials kept in memory; the moment the link is clicked the email is confirmed, sign-in succeeds and the app opens. Clicking the link on the phone also deep-links back into the app.
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Screen } from '@/components/Screen';
@@ -47,8 +47,14 @@ export default function WelcomeScreen() {
       <View style={styles.spacer} />
 
       {error ? <Text style={styles.error}>{error}</Text> : null}
+      {busy ? (
+        <View style={styles.loader}>
+          <ActivityIndicator color={colors.yellow} />
+          <Text style={styles.loaderText}>{t('auth.googleWait')}</Text>
+        </View>
+      ) : null}
       <View style={styles.btns}>
-        <Button label={t('welcome.google')} onPress={google} variant="white" disabled={busy || !configured} />
+        <Button label={busy ? t('auth.working') : t('welcome.google')} onPress={google} variant="white" disabled={busy || !configured} />
         <Button label={t('welcome.signup')} onPress={() => router.push('/auth/signup')} disabled={busy || !configured} />
         <Button label={t('welcome.login')} onPress={() => router.push('/auth/login')} variant="outline" disabled={busy || !configured} />
         {!configured && (
@@ -82,6 +88,8 @@ const styles = StyleSheet.create({
   spacer: { flex: 1, minHeight: space.xxl },
   btns: { gap: space.sm },
   error: { color: colors.yellow, fontFamily: fonts.body, fontSize: 14 },
+  loader: { flexDirection: 'row', alignItems: 'center', gap: 10, alignSelf: 'center' },
+  loaderText: { color: colors.muted, fontFamily: fonts.body, fontSize: 14 },
   hint: { color: colors.dim, fontFamily: fonts.body, fontSize: 12, textAlign: 'center', marginTop: 4 },
   legal: { color: colors.dim, fontFamily: fonts.body, fontSize: 12, textAlign: 'center', marginTop: space.sm },
 });

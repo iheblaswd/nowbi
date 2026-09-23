@@ -131,6 +131,7 @@
       "googleOff": "Google sign-in is not enabled yet.",
       "network": "No connection. Try again.",
       "generic": "Something went wrong. Try again."
-    }
+    },
+    "googleWait": "Finishing sign-in with Google…"
   }
 }

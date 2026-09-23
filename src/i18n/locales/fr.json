@@ -131,6 +131,7 @@
       "googleOff": "La connexion Google n’est pas encore activée.",
       "network": "Pas de connexion. Réessaie.",
       "generic": "Un problème est survenu. Réessaie."
-    }
+    },
+    "googleWait": "Connexion avec Google en cours…"
   }
 }
